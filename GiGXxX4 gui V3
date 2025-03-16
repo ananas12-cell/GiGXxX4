@@ -1,0 +1,118 @@
+-- Criando o GUI
+local ScreenGui = Instance.new("ScreenGui")
+local MainFrame = Instance.new("Frame")
+local ScrollingFrame = Instance.new("ScrollingFrame")
+local UIListLayout = Instance.new("UIListLayout")
+local ScriptBox = Instance.new("TextBox")
+local ExecuteButton = Instance.new("TextButton")
+
+-- Propriedades do GUI
+ScreenGui.Parent = game:GetService("CoreGui")
+
+MainFrame.Size = UDim2.new(0, 220, 0, 350)
+MainFrame.Position = UDim2.new(0.4, 0, 0.3, 0)
+MainFrame.BackgroundColor3 = Color3.fromRGB(128, 0, 128) -- Roxo
+MainFrame.Parent = ScreenGui
+
+-- Nome do GUI
+local Title = Instance.new("TextLabel")
+Title.Size = UDim2.new(1, 0, 0, 30)
+Title.BackgroundColor3 = Color3.fromRGB(100, 0, 100)
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.Text = "GiGXxX4 V3"
+Title.Parent = MainFrame
+
+ScrollingFrame.Size = UDim2.new(1, 0, 1, -90)
+ScrollingFrame.Position = UDim2.new(0, 0, 0, 30)
+ScrollingFrame.CanvasSize = UDim2.new(0, 0, 2, 0)
+ScrollingFrame.ScrollBarThickness = 5
+ScrollingFrame.Parent = MainFrame
+
+UIListLayout.Parent = ScrollingFrame
+UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+
+-- Caixa de entrada para scripts
+ScriptBox.Size = UDim2.new(1, -10, 0, 30)
+ScriptBox.Position = UDim2.new(0, 5, 1, -50)
+ScriptBox.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
+ScriptBox.TextColor3 = Color3.fromRGB(0, 0, 0)
+ScriptBox.PlaceholderText = "Digite seu script Lua aqui..."
+ScriptBox.Parent = MainFrame
+
+-- Botão de execução de scripts
+ExecuteButton.Size = UDim2.new(1, -10, 0, 30)
+ExecuteButton.Position = UDim2.new(0, 5, 1, -20)
+ExecuteButton.BackgroundColor3 = Color3.fromRGB(150, 0, 150)
+ExecuteButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+ExecuteButton.Text = "Executar"
+ExecuteButton.Parent = MainFrame
+
+ExecuteButton.MouseButton1Click:Connect(function()
+    local scriptText = ScriptBox.Text
+    if scriptText and scriptText ~= "" then
+        loadstring(scriptText)()
+    end
+end)
+
+-- Função para criar botões
+local function createButton(text, scriptUrl)
+    local button = Instance.new("TextButton")
+    button.Size = UDim2.new(1, 0, 0, 30)
+    button.BackgroundColor3 = Color3.fromRGB(150, 0, 150)
+    button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    button.Text = text
+    button.Parent = ScrollingFrame
+    
+    button.MouseButton1Click:Connect(function()
+        loadstring(game:HttpGet(scriptUrl, true))()
+    end)
+end
+
+-- Criando botões
+createButton("LALOL Hub Scanner", "https://raw.githubusercontent.com/Its-LALOL/LALOL-Hub/main/Backdoor-Scanner/script")
+createButton("Infinite Yield", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source")
+createButton("Open Aimbot", "https://raw.githubusercontent.com/ttwizz/Open-Aimbot/master/source.lua")
+createButton("Rarwell FE GUI", "https://pastebin.com/raw/HJzCKn29")
+createButton("C00lkid Revival", "https://raw.githubusercontent.com/c00lkiddzkj/ultimate-c00lgui-revival/refs/heads/main/ultimate%20c00lgui%20revival")
+createButton("Outro Script", "https://pastefy.app/3gIynQ0N/raw")
+createButton("Backdoor Legacy", "https://raw.githubusercontent.com/IvanTheProtogen/BackdoorLegacy/main/main.lua")
+createButton("trollFaceYeetFEGui", "https://pastebin.com/raw/5eHbUDBp")
+createButton("Tubers rmk fe", "https://pastebin.com/raw/KJw4sZkz")
+createButton("1X1X1X1 fe rmk", "https://pastebin.com/raw/J2iiyETE")
+createButton("chat bypasser", "https://raw.githubusercontent.com/AnnaRoblox/AnnaBypasser/refs/heads/main/AnnaBypasser.lua")
+createButton("666", "https://raw.githubusercontent.com/Seco53/Guest-666-Scripts/refs/heads/main/Guest%20666Gui.lua")
+createButton("prison life fe", "https://pastebin.com/raw/RDvCVBWu")
+createButton("legacy modified", "https://pastebin.com/raw/sbnxjiwq")
+createButton("another 1X1X1X1", "https://raw.githubusercontent.com/ananas12-cell/1X1X1X1/refs/heads/main/gui")
+createButton("bany scanner", "https://pastebin.com/raw/H6jUi6uM")
+createButton("FEX gui dont wrk in every game", "https://pastebin.com/raw/ThXJDqrJ")
+createButton("idk a random gui", "https://raw.githubusercontent.com/LuaGunsX/HerbertV1/main/main.lua")
+
+-- Sistema de movimentação
+local dragging, dragInput, dragStart, startPos
+
+MainFrame.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = true
+        dragStart = input.Position
+        startPos = MainFrame.Position
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
+    end
+end)
+
+MainFrame.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement then
+        dragInput = input
+    end
+end)
+
+game:GetService("UserInputService").InputChanged:Connect(function(input)
+    if input == dragInput and dragging then
+        local delta = input.Position - dragStart
+        MainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    end
+end)
